@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView encrypted_text;
 
     private static final String SECRET_KEY = "mySecretKey12345"; //needs to be 16 bytes
+    private static final String HMAC_SHA512 = "HmacSHA512";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public String encrypt(String strToEncrypt, String secret) {
+    private String encrypt(String strToEncrypt, String secret) {
         try {
             SecretKeySpec keySpec = getKey(secret);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    public SecretKeySpec getKey(String myKey) {
+    private SecretKeySpec getKey(String myKey) {
         SecretKeySpec secretKey = null;
         try {
             byte[] key = myKey.getBytes(StandardCharsets.UTF_8);
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         return secretKey;
     }
 
-    public String decrypt(String strToDecrypt, String secret) {
+    private String decrypt(String strToDecrypt, String secret) {
         try {
             SecretKeySpec keySpec = getKey(secret);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
@@ -75,9 +76,8 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    private static final String HMAC_SHA512 = "HmacSHA512";
 
-    public byte[] calculateHMAC(String data, String key) {
+    private byte[] calculateHMAC(String data, String key) {
         try {
             SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), HMAC_SHA512);
             Mac mac = Mac.getInstance(HMAC_SHA512);
